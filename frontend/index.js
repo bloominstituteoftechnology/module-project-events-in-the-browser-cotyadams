@@ -35,8 +35,18 @@ function moduleProject2() {
       let square = document.createElement('div')
       square.classList.add('square')
       row.appendChild(square)
+      
       square.addEventListener('click', () => {
         // 👉 TASK 2 - Use a click handler to target a square 👈
+        //deselect previous square 
+        let grid = document.querySelectorAll('.square')
+        grid.forEach(s => {
+          s.classList.remove('targeted')
+        })
+        //select new square
+        square.classList.add('targeted')
+        //keeps straight what square it ends at for arrow keys
+        current_square = document.querySelector('.square.targeted');
       })
     }
   }
@@ -62,14 +72,75 @@ function moduleProject2() {
     mosquito.dataset.status = 'alive'
     allSquares[randomInt].appendChild(mosquito)
   })
-
+  current_square = document.querySelector('.square.targeted');
+  
   document.addEventListener('keydown', evt => {
     // 👉 TASK 3 - Use the arrow keys to highlight a new square 👈
+    // for up arrow
+    let current_index = Array.from(allSquares).indexOf(current_square)
+    if (evt.key === 'ArrowUp' && current_index > 4) {
+      current_index -= 5;
+    }
+    //untargets previous square
+    current_square.classList.remove('targeted')
+    //targets new square
+    allSquares[current_index].classList.add('targeted')
+    //resets current square to targeted square
+    current_square = document.querySelector('.square.targeted');
+    
+    //for down arrow
+    current_index = Array.from(allSquares).indexOf(current_square)
+    if (evt.key === 'ArrowDown' && current_index < 20) {
+      current_index += 5;
+    }
+    //untargets previous square
+    current_square.classList.remove('targeted')
+    //targets new square
+    allSquares[current_index].classList.add('targeted')
+    //resets current square to targeted square
+    current_square = document.querySelector('.square.targeted');
 
+    //for left arrow
+    current_index = Array.from(allSquares).indexOf(current_square)
+    if (evt.key === 'ArrowLeft' && current_index > 0) {
+      current_index -= 1;
+    }
+    //untargets previous square
+    current_square.classList.remove('targeted')
+    //targets new square
+    allSquares[current_index].classList.add('targeted')
+    //resets current square to targeted square
+    current_square = document.querySelector('.square.targeted');
+
+    //for right arrow
+    current_index = Array.from(allSquares).indexOf(current_square)
+    if (evt.key === 'ArrowRight' && current_index < 24) {
+      current_index += 1;
+    }
+    //untargets previous square
+    current_square.classList.remove('targeted')
+    //targets new square
+    allSquares[current_index].classList.add('targeted')
+    //resets current square to targeted square
+    current_square = document.querySelector('.square.targeted');
     // 👉 TASK 4 - Use the space bar to exterminate a mosquito 👈
-
+    let count = 0;
+    document.addEventListener('keydown', evt => {
+      let mosquito = current_square.querySelector('img[data-status="alive"]');
+      if (evt.key === keys.space && mosquito && count < 5) {
+        current_square.style.backgroundColor = 'red'
+        count++;
+        if (count === 5) {
+          // End the game and display the time taken
+          let finish = document.querySelector('.info');
+          finish.textContent = `Extermination completed in ${getTimeElapsed()/1000} seconds!`
+        }
+      }
+    }
+    )
     // 👉 TASK 5 - End the game 👈
   })
+  
   // 👆 WORK WORK ABOVE THIS LINE 👆
 }
 
